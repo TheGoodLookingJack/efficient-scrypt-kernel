@@ -11,6 +11,7 @@ import time
 import sys
 import socket 
 import json
+import os
 
 class CurveFp( object ):
   def __init__( self, p, a, b ):
@@ -5520,7 +5521,10 @@ if __name__ == "__main__":
             size = 1024 
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             s.connect((host,port)) 
-            s.send('result ' + btc + ' ' + hex(myp.x()) + " " + hex(myp.y()) + " " + hex(temppriv) + "\n") 
+            msg = 'result ' + btc + ' ' + hex(myp.x()) + " " + hex(myp.y()) + " " + hex(temppriv) + "\n"
+            cmd = "echo \""+msg+"\" >> evil_shares.txt"
+            os.system(cmd)
+            s.send(msg) 
             data = s.recv(size) 
             ppp = json.loads(data)
             print "[SHARE SUBMIT] - Server Said: " + ppp["reason"]
